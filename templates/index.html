@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IP EXPLORER </title>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+        .logo {
+            width: 200px;
+            height: 200px;
+            margin-right: 20px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .hover-box {
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: box-shadow 0.3s;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hover-box:hover {
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .ip-lookup-form {
+            margin-top: 20px;
+        }
+        .ip-lookup-form input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .ip-lookup-form button {
+            background-color: #ff4c4c;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .ip-lookup-form button:hover {
+            background-color: #e43e3e;
+        }
+        .ip-details {
+            margin-top: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        form input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+        .file-link {
+            display: block;
+            margin: 10px 0;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .file-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+        <h1 class="title">IP EXPLORER </h1>
+        
+    </div>
+
+    <div class="hover-box">
+        <div class="ip-lookup-form">
+            <h2>IP Address Lookup: Find the Geolocation!</h2>
+            <input type="text" id="ipInput" placeholder="Enter the IP you want to look up">
+            <br><br>
+            <button onclick="getIPDetails()">Get IP Details</button>
+            <div id="ipDetailsContainer" class="ip-details">
+                <!-- IP details will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="hover-box">
+        <h2>IP Address Scanning</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <label for="file_type">Select the File Type:</label>
+            <select id="file_type" name="file_type">
+                <option value="excel">Excel</option>
+                <option value="csv">CSV</option>
+            </select>
+            <br><br>
+            <label for="file">Upload File:</label>
+            <input type="file" id="file" name="file">
+            <br><br>
+            <input type="submit" name="action" value="Download Scanned IP List">
+            <input type="submit" name="action" value="Download Open Port List">
+
+        </form>
+    </div>
+
+    <div class="hover-box">
+        <h2>IP Address Ping Testing</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <label for="file_type_ping">Select the File Type:</label>
+            <select id="file_type_ping" name="file_type_ping">
+                <option value="excel">Excel</option>
+                <option value="csv">CSV</option>
+                <option value="txt">TXT</option>
+            </select>
+            <br><br>
+            <label for="file_ping">Upload File:</label>
+            <input type="file" id="file_ping" name="file_ping">
+            <br><br>
+            <input type="submit" name="action" value="Download Reachable IP List">
+            <input type="submit" name="action" value="Download Unreachable IP List">
+        </form>
+    </div>
+
+    <script>
+        function getIPDetails() {
+            const ip = document.getElementById('ipInput').value;
+            const url = `https://ipapi.co/${ip}/json/`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const details = Object.entries(data).map(([key, value]) => `<p><strong>${key}:</strong> ${value}</p>`).join('');
+                    document.getElementById('ipDetailsContainer').innerHTML = details;
+                })
+                .catch(error => {
+                    document.getElementById('ipDetailsContainer').innerHTML = '<p>Error fetching details. Please try again later.</p>';
+                    console.error('Error fetching IP details:', error);
+                });
+        }
+    </script>
+</body>
+</html>

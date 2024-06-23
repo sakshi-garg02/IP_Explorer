@@ -1,0 +1,13 @@
+asyncio
+numpy
+pandas
+aiohttp
+pytz
+six
+tzdata
+gunicorn
+flask
+werkzeug
+openpyxl
+eventlet
+asgiref
